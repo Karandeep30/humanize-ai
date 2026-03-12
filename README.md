@@ -7,7 +7,7 @@ HumanizeAI is a modern SaaS-style Next.js app that rewrites AI-generated or robo
 - Next.js with App Router
 - TypeScript
 - Tailwind CSS
-- Mock AI provider via a server-side route for development
+- Gemini via a server-side route
 - Ready for Vercel deployment
 
 ## Project structure
@@ -26,7 +26,7 @@ HumanizeAI is a modern SaaS-style Next.js app that rewrites AI-generated or robo
 ├── lib
 │   └── humanizer
 │       ├── index.ts
-│       ├── mock-provider.ts
+│       ├── gemini-provider.ts
 │       └── types.ts
 ├── .env.example
 ├── .gitignore
@@ -41,7 +41,11 @@ HumanizeAI is a modern SaaS-style Next.js app that rewrites AI-generated or robo
 
 ## Environment variables
 
-No environment variables are required for local development right now. The app uses a mock rewrite provider so the UI and API flow can be tested without external services.
+Create a `.env.local` file in the project root:
+
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
 ## Run locally
 
@@ -63,7 +67,7 @@ npm run dev
 
 - Users paste text into the demo area
 - The app sends the text and selected tone to `/api/humanize`
-- The route calls a mock provider that lightly rewrites the text for readability during development
+- The route calls Gemini with the selected tone and the input text
 - The rewritten text is returned to the client and shown in the output panel
 
 ## Deploy on Vercel
@@ -76,4 +80,4 @@ Vercel will automatically detect Next.js and build the app.
 
 ## Provider notes
 
-The current API route uses a mock provider located under `lib/humanizer/`. The route only depends on the provider interface, so a real AI integration can be added later by introducing another provider and swapping the implementation in `getHumanizerProvider()`.
+The current API route uses a Gemini provider located under `lib/humanizer/`. The route depends on the provider interface, so a different AI backend can still be added later by introducing another provider and swapping the implementation in `getHumanizerProvider()`.

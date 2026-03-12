@@ -21,8 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const selectedTone =
-      tone && tones.includes(tone) ? tone : "Natural";
+    const selectedTone = tone && tones.includes(tone) ? tone : "Natural";
     const humanizedText = await getHumanizerProvider().rewrite({
       text: trimmedText,
       tone: selectedTone,
@@ -35,6 +34,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ text: humanizedText });
   } catch (error) {
     console.error("Humanize API error:", error);
+
+    if (error instanceof Error && error.message === "GEMINI_API_KEY is not configured.") {
+      return NextResponse.json(
+        { error: "GEMINI_API_KEY is not configured on the server." },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json(
       { error: "Something went wrong while humanizing the text." },
